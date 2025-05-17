@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Super-SCAD-Hole"
-version = "0.0.0"
+version = "0.9.0"
 description = "SuperSCAD widget for holes."
 authors = ["P.R. Water <p.r.water@setbased.nl>"]
 license = "MIT"
