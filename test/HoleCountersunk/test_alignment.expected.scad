@@ -4,7 +4,7 @@ $vpr = [90.0, 0.0, 0.0];
 
 union()
 {
-   rotate_extrude(angle = 360.0)
+   rotate_extrude(angle = 360.0, convexity = 2)
    {
       difference()
       {
@@ -21,7 +21,7 @@ union()
    }
    translate(v = [5.0, 0.0, 0.0])
    {
-      rotate_extrude(angle = 360.0)
+      rotate_extrude(angle = 360.0, convexity = 2)
       {
          difference()
          {
@@ -39,7 +39,7 @@ union()
    }
    translate(v = [10.0, 0.0, 0.0])
    {
-      rotate_extrude(angle = 360.0)
+      rotate_extrude(angle = 360.0, convexity = 2)
       {
          difference()
          {

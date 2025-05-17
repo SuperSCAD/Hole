@@ -17,7 +17,7 @@ from super_scad_hole.HoleAlignment import HoleAlignment
 from super_scad_hole.HoleRotationMixin import HoleRotationMixin
 
 
-class HoleSimple(HoleRotationMixin, Hole):
+class HoleSimple(Hole, HoleRotationMixin):
     """
     Widget for creating simple holes.
     """
@@ -91,8 +91,8 @@ class HoleSimple(HoleRotationMixin, Hole):
         :param args: The arguments supplied to the constructor.
         """
         validator = ArgumentValidator(args)
-        validator.validate_exclusive({'radius'}, {'diameter'})
-        validator.validate_required({'height'},
+        validator.validate_exclusive('radius', 'diameter')
+        validator.validate_required('height',
                                     {'radius', 'diameter'})
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -207,6 +207,6 @@ class HoleSimple(HoleRotationMixin, Hole):
         if isinstance(self.profile_top, Rough) and isinstance(self.profile_bottom, Rough):
             return self._build_cylinder()
 
-        return HoleRotationMixin.build(self, context)
+        return HoleRotationMixin._build_hole(self, context)
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -4,6 +4,7 @@ from typing import Any, Dict, Tuple
 from super_scad.d2.Polygon import Polygon
 from super_scad.scad.ArgumentValidator import ArgumentValidator
 from super_scad.scad.Context import Context
+from super_scad.scad.ScadWidget import ScadWidget
 from super_scad.type import Vector2
 from super_scad.util.Radius2Sides4n import Radius2Sides4n
 from super_scad_smooth_profile.SmoothProfile3D import SmoothProfile3D
@@ -275,5 +276,14 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         polygon = Polygon(points=nodes, extend_by_eps_sides=extend_by_eps_sides)
 
         return polygon, top_params, bottom_params
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def build(self, context: Context) -> ScadWidget:
+        """
+        Builds a SuperSCAD widget.
+
+        :param context: The build context.
+        """
+        return HoleRotationMixin._build_hole(self, context)
 
 # ----------------------------------------------------------------------------------------------------------------------

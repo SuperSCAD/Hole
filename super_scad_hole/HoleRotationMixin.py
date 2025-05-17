@@ -36,9 +36,9 @@ class HoleRotationMixin(ABC):
         raise NotImplementedError()
 
     # ------------------------------------------------------------------------------------------------------------------
-    def build(self, context: Context) -> ScadWidget:
+    def _create_profile(self, context: Context) -> Tuple[ScadWidget, int]:
         """
-        Builds a SuperSCAD widget.
+        Returns the profile of the hole.
 
         :param context: The build context.
         """
@@ -69,9 +69,23 @@ class HoleRotationMixin(ABC):
         if negatives:
             profile = Difference(children=[profile, *negatives])
 
+        convexity = max(2, self.profile_top.convexity or 0, self.profile_bottom.convexity or 0)
+
+        return profile, convexity
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def _build_hole(self, context: Context) -> ScadWidget:
+        """
+        Builds a SuperSCAD widget.
+
+        :param context: The build context.
+        """
+        profile, convexity = self._create_profile(context)
+
         hole = RotateExtrude(fa=self.fa,
                              fs=self.fs,
                              fn=self.real_fn(context),
+                             convexity=convexity,
                              child=profile)
 
         return hole
