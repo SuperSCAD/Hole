@@ -27,8 +27,17 @@ SuperSCAD widgets for holes.
 </tbody>
 </table>
 
+Widgets for simple holes, counterbore & spotface holes, countersink holes, and counterdrill holes. All holes have their
+slotted twin holes. All holes can be finished with smoothing profiles such as fillets and chamfers. All holes are 
+by default extended at their top and bottom by eps for a clear overlap (in the demo below eps has been set to a much 
+larger value than normal).
+
 ![Demo.](/docs/images/demo.gif "Demo")
 
-# License
+## Resources
+
+* https://engineersbible.com/types-of-holes/
+
+## License
 
 This project is licensed under the terms of the [MIT license](LICENSE).
