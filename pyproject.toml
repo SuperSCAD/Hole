@@ -6,7 +6,7 @@ authors = ["P.R. Water <p.r.water@setbased.nl>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/SuperSCAD/Hole"
-documentation = "https://superscad.readthedocs.io/"
+documentation = "https://www.superscad.org/"
 keywords = ["OpenSCAD", "SuperSCAD", "Hole", "Circle Segment", "Ellipse", "Ellipsoid"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
