@@ -49,6 +49,8 @@ class HoleCountersunkTest(ScadTestCase):
         hole1 = HoleCountersunk(height=10.0,
                                 diameter=2.0,
                                 countersink_diameter=4.0,
+                                countersink_angle=None,
+                                countersink_height=1.0,
                                 alignment=HoleAlignment.TOP,
                                 profile_top=Fillet(radius=1.0, side=2),
                                 profile_bottom=Chamfer(skew_length=0.2, side=1))

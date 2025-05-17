@@ -27,7 +27,8 @@ class HoleCountersunk(HoleRotationMixin, Hole):
                  diameter: float | None = None,
                  countersink_radius: float | None = None,
                  countersink_diameter: float | None = None,
-                 countersink_angle: float = 90.0,
+                 countersink_angle: float | None = 90.0,
+                 countersink_height: float | None = None,
                  alignment: HoleAlignment,
                  profile_top: SmoothProfile3D | None = None,
                  profile_bottom: SmoothProfile3D | None = None,
@@ -47,6 +48,7 @@ class HoleCountersunk(HoleRotationMixin, Hole):
         :param countersink_radius: The radius at the top of the countersink.
         :param countersink_diameter: The diameter at the top of the countersink.
         :param countersink_angle: The angle of the countersink.
+        :param countersink_height: The height of the countersink.
         :param alignment: The alignment of the whole relative to the xy-plane.
         :param extend_by_eps_top: Whether to extend the top of the hole by eps for a clear overlap.
         :param extend_by_eps_bottom: Whether to extend the bottom of the hole by eps for a clear overlap.
@@ -98,6 +100,11 @@ class HoleCountersunk(HoleRotationMixin, Hole):
         The angle of the countersink.
         """
 
+        self._countersink_height: float | None = countersink_height
+        """
+        The height of the countersink.
+        """
+
         self.__validate_arguments(locals())
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -109,12 +116,13 @@ class HoleCountersunk(HoleRotationMixin, Hole):
         :param args: The arguments supplied to the constructor.
         """
         validator = ArgumentValidator(args)
-        validator.validate_exclusive({'radius'}, {'diameter'})
-        validator.validate_exclusive({'countersink_radius'}, {'countersink_diameter'})
-        validator.validate_required({'height'},
-                                    {'radius', 'diameter'},
-                                    {'countersink_radius', 'countersink_diameter'},
-                                    {'countersink_angle'})
+        validator.validate_exclusive('radius', 'diameter')
+        validator.validate_exclusive('countersink_radius', 'countersink_diameter')
+        validator.validate_required('height', {'radius', 'diameter'})
+        validator.validate_count(2,
+                                 {'countersink_radius', 'countersink_diameter'},
+                                 'countersink_angle',
+                                 'countersink_height')
 
     # ------------------------------------------------------------------------------------------------------------------
     @property
@@ -172,9 +180,25 @@ class HoleCountersunk(HoleRotationMixin, Hole):
     @property
     def countersink_angle(self) -> float:
         """
-        Returns the angle at the top of the countersink.
+        Returns the angle of the countersink.
         """
+        if self._countersink_angle is None:
+            self._countersink_angle = 2.0 * math.degrees(math.atan2(self.countersink_radius - self.radius,
+                                                                    self.countersink_height))
+
         return self._countersink_angle
+
+    # ------------------------------------------------------------------------------------------------------------------
+    @property
+    def countersink_height(self) -> float:
+        """
+        Returns the height of the countersink.
+        """
+        if self._countersink_height is None:
+            diff_radia = self.countersink_radius - self.radius
+            self._countersink_height = diff_radia / math.tan(math.radians(0.5 * self.countersink_angle))
+
+        return self._countersink_height
 
     # ------------------------------------------------------------------------------------------------------------------
     def real_fn(self, context: Context) -> int | None:
@@ -200,13 +224,10 @@ class HoleCountersunk(HoleRotationMixin, Hole):
         else:
             raise ValueError(f'Unknown alignment {self.alignment}')
 
-        diff_radia = self.countersink_radius - self.radius
-        countersink_height = diff_radia / math.tan(math.radians(0.5 * self.countersink_angle))
-
         nodes = [Vector2(0.0, vertical_offset),
                  Vector2(0.0, vertical_offset + self.height),
                  Vector2(self.countersink_radius, vertical_offset + self.height),
-                 Vector2(self.radius, vertical_offset + self.height - countersink_height),
+                 Vector2(self.radius, vertical_offset + self.height - self.countersink_height),
                  Vector2(self.radius, vertical_offset)]
 
         inner_angle = 90.0 - 0.5 * self.countersink_angle
