@@ -6,11 +6,11 @@ from super_scad.scad.ScadWidget import ScadWidget
 from super_scad_smooth_profile.SmoothProfile3D import SmoothProfile3D
 
 from super_scad_hole.HoleAlignment import HoleAlignment
-from super_scad_hole.HoleCounterdrilled import HoleCounterdrilled
+from super_scad_hole.HoleCountersunk import HoleCountersunk
 from super_scad_hole.HoleRotationSlottedMixin import HoleRotationSlottedMixin
 
 
-class HoleCountersunkSlotted(HoleCounterdrilled, HoleRotationSlottedMixin):
+class HoleCountersunkSlotted(HoleCountersunk, HoleRotationSlottedMixin):
     """
     Widget for creating countersunk slotted holes.
     """
@@ -60,25 +60,24 @@ class HoleCountersunkSlotted(HoleCounterdrilled, HoleRotationSlottedMixin):
         :param fn: The fixed number of fragments in 360 degrees. Values of 3 or more override fa and fs.
         :param fn4n: Whether to create a hole with a multiple of 4 vertices.
         """
-        HoleCounterdrilled.__init__(self,
-                                    height=height,
-                                    radius=radius,
-                                    diameter=diameter,
-                                    countersink_radius=countersink_radius,
-                                    countersink_diameter=countersink_diameter,
-                                    countersink_angle=countersink_angle,
-                                    countersink_height=countersink_height,
-                                    counterdrill_height=0.0,
-                                    alignment=alignment,
-                                    profile_top=profile_top,
-                                    profile_bottom=profile_bottom,
-                                    extend_by_eps_top=extend_by_eps_top,
-                                    extend_by_eps_bottom=extend_by_eps_bottom,
-                                    extend_by_eps_boundary=extend_by_eps_boundary,
-                                    fa=fa,
-                                    fs=fs,
-                                    fn=fn,
-                                    fn4n=fn4n)
+        HoleCountersunk.__init__(self,
+                                 height=height,
+                                 radius=radius,
+                                 diameter=diameter,
+                                 countersink_radius=countersink_radius,
+                                 countersink_diameter=countersink_diameter,
+                                 countersink_angle=countersink_angle,
+                                 countersink_height=countersink_height,
+                                 alignment=alignment,
+                                 profile_top=profile_top,
+                                 profile_bottom=profile_bottom,
+                                 extend_by_eps_top=extend_by_eps_top,
+                                 extend_by_eps_bottom=extend_by_eps_bottom,
+                                 extend_by_eps_boundary=extend_by_eps_boundary,
+                                 fa=fa,
+                                 fs=fs,
+                                 fn=fn,
+                                 fn4n=fn4n)
         self._overall_length: float | None = overall_length
         """
         The overall length of the hole. 

@@ -21,11 +21,11 @@ class HoleCounterdrilledSlotted(HoleCounterdrilled, HoleRotationSlottedMixin):
                  height: float,
                  radius: float | None = None,
                  diameter: float | None = None,
-                 countersink_radius: float | None = None,
-                 countersink_diameter: float | None = None,
+                 counterdrill_radius: float | None = None,
+                 counterdrill_diameter: float | None = None,
+                 counterdrill_height: float,
                  countersink_angle: float | None = 90.0,
                  countersink_height: float | None = None,
-                 counterdrill_height: float,
                  overall_length: float | None = None,
                  center_to_center: float | None = None,
                  alignment: HoleAlignment,
@@ -44,11 +44,11 @@ class HoleCounterdrilledSlotted(HoleCounterdrilled, HoleRotationSlottedMixin):
         :param height: The height of the hole.
         :param radius: The radius of the hole.
         :param diameter: The diameter of the hole.
-        :param countersink_radius: The radius at the top of the countersink.
-        :param countersink_diameter: The diameter at the top of the countersink.
+        :param counterdrill_radius: The radius at the top of the countersink.
+        :param counterdrill_diameter: The diameter at the top of the countersink.
+        :param counterdrill_height: The height of the counterdrill.
         :param countersink_angle: The angle of the countersink.
         :param countersink_height: The height of the countersink.
-        :param counterdrill_height: The height of the counterdrill.
         :param overall_length: The overall length of the slotted hole.
         :param center_to_center: The distance between two centers of the slotted hole.
         :param alignment: The alignment of the whole relative to the xy-plane.
@@ -66,11 +66,11 @@ class HoleCounterdrilledSlotted(HoleCounterdrilled, HoleRotationSlottedMixin):
                                     height=height,
                                     radius=radius,
                                     diameter=diameter,
-                                    countersink_radius=countersink_radius,
-                                    countersink_diameter=countersink_diameter,
+                                    counterdrill_radius=counterdrill_radius,
+                                    counterdrill_diameter=counterdrill_diameter,
+                                    counterdrill_height=counterdrill_height,
                                     countersink_angle=countersink_angle,
                                     countersink_height=countersink_height,
-                                    counterdrill_height=counterdrill_height,
                                     alignment=alignment,
                                     profile_top=profile_top,
                                     profile_bottom=profile_bottom,
@@ -123,7 +123,7 @@ class HoleCounterdrilledSlotted(HoleCounterdrilled, HoleRotationSlottedMixin):
         Returns the distance between two centers of the two circles of the hole.
         """
         if self._center_to_center is None:
-            self._center_to_center = self._overall_length - self.countersink_diameter
+            self._center_to_center = self._overall_length - self.counterdrill_diameter
 
         return self._center_to_center
 

@@ -19,20 +19,20 @@ class HoleCounterdrilledSlottedTest(ScadTestCase):
     # ------------------------------------------------------------------------------------------------------------------
     def test_alignment(self):
         """
-        Test the alignment of a countersunk hole.
+        Test the alignment of a counterdrilled hole.
         """
         scad = Scad(context=Context(fn=360, eps=0.35, vpr=Vector3(90.0, 0.0, 0.0)))
 
         hole1 = HoleCounterdrilledSlotted(height=10.0,
                                           diameter=1.0,
-                                          countersink_diameter=3.0,
+                                          counterdrill_diameter=3.0,
                                           counterdrill_height=1.5,
                                           center_to_center=6.0,
                                           alignment=HoleAlignment.TOP)
 
         hole2 = HoleCounterdrilledSlotted(height=10.0,
                                           diameter=1.0,
-                                          countersink_diameter=3.0,
+                                          counterdrill_diameter=3.0,
                                           counterdrill_height=1.5,
                                           center_to_center=6.0,
                                           alignment=HoleAlignment.CENTER)
@@ -40,7 +40,7 @@ class HoleCounterdrilledSlottedTest(ScadTestCase):
 
         hole3 = HoleCounterdrilledSlotted(height=10.0,
                                           diameter=1.0,
-                                          countersink_diameter=3.0,
+                                          counterdrill_diameter=3.0,
                                           counterdrill_height=1.5,
                                           center_to_center=6.0,
                                           alignment=HoleAlignment.BOTTOM)
@@ -57,13 +57,13 @@ class HoleCounterdrilledSlottedTest(ScadTestCase):
     # ------------------------------------------------------------------------------------------------------------------
     def test_alignment_with_profiles(self):
         """
-        Test the alignment of a countersunk hole with profiles.
+        Test the alignment of a counterdrilled hole with profiles.
         """
         scad = Scad(context=Context(fn=360, eps=0.1, vpr=Vector3(90.0, 0.0, 0.0)))
 
         hole1 = HoleCounterdrilledSlotted(height=10.0,
                                           diameter=2.0,
-                                          countersink_diameter=4.0,
+                                          counterdrill_diameter=4.0,
                                           countersink_angle=None,
                                           countersink_height=1.0,
                                           counterdrill_height=2.0,
@@ -74,7 +74,7 @@ class HoleCounterdrilledSlottedTest(ScadTestCase):
 
         hole2 = HoleCounterdrilledSlotted(height=10.0,
                                           diameter=2.0,
-                                          countersink_diameter=4.0,
+                                          counterdrill_diameter=4.0,
                                           counterdrill_height=2.0,
                                           center_to_center=6.0,
                                           alignment=HoleAlignment.CENTER,
@@ -84,7 +84,7 @@ class HoleCounterdrilledSlottedTest(ScadTestCase):
 
         hole3 = HoleCounterdrilledSlotted(height=10.0,
                                           diameter=2.0,
-                                          countersink_diameter=4.0,
+                                          counterdrill_diameter=4.0,
                                           counterdrill_height=2.0,
                                           center_to_center=6.0,
                                           alignment=HoleAlignment.BOTTOM,

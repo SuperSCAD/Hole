@@ -26,11 +26,11 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
                  height: float,
                  radius: float | None = None,
                  diameter: float | None = None,
-                 countersink_radius: float | None = None,
-                 countersink_diameter: float | None = None,
+                 counterdrill_radius: float | None = None,
+                 counterdrill_diameter: float | None = None,
+                 counterdrill_height: float,
                  countersink_angle: float | None = 90.0,
                  countersink_height: float | None = None,
-                 counterdrill_height: float,
                  alignment: HoleAlignment,
                  profile_top: SmoothProfile3D | None = None,
                  profile_bottom: SmoothProfile3D | None = None,
@@ -47,11 +47,11 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         :param height: The total height of the hole.
         :param radius: The radius of the hole.
         :param diameter: The diameter of the hole.
-        :param countersink_radius: The radius at the top of the countersink.
-        :param countersink_diameter: The diameter at the top of the countersink.
+        :param counterdrill_radius: The radius at the top of the countersink.
+        :param counterdrill_diameter: The diameter at the top of the countersink.
+        :param counterdrill_height: The height of the counterdrill.
         :param countersink_angle: The angle of the countersink.
         :param countersink_height: The height of the countersink.
-        :param counterdrill_height: The height of the counterdrill.
         :param alignment: The alignment of the whole relative to the xy-plane.
         :param profile_top: The profile of the top of the hole.
         :param profile_bottom: The profile of the bottom of the hole.
@@ -90,14 +90,19 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         The diameter of the hole.
         """
 
-        self._countersink_radius: float | None = countersink_radius
+        self._counterdrill_radius: float | None = counterdrill_radius
         """
-        The radius at the top of the countersink.
+        The radius of the counterdrill.
         """
 
-        self._countersink_diameter: float | None = countersink_diameter
+        self._counterdrill_diameter: float | None = counterdrill_diameter
         """
-        The diameter at the top of the countersink.
+        The diameter of the counterdrill.
+        """
+
+        self._counterdrill_height: float = counterdrill_height
+        """
+        The height of the counterdrill.
         """
 
         self._countersink_angle: float | None = countersink_angle
@@ -108,11 +113,6 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         self._countersink_height: float | None = countersink_height
         """
         The height of the countersink.
-        """
-
-        self._counterdrill_height: float = counterdrill_height
-        """
-        The height of the counterdrill.
         """
 
         self.__validate_arguments(locals())
@@ -127,10 +127,12 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         """
         validator = ArgumentValidator(args)
         validator.validate_exclusive('radius', 'diameter')
-        validator.validate_exclusive('countersink_radius', 'countersink_diameter')
-        validator.validate_required('height', {'radius', 'diameter'}, 'counterdrill_height')
+        validator.validate_exclusive('counterdrill_radius', 'counterdrill_diameter')
+        validator.validate_required('height',
+                                    {'radius', 'diameter'},
+                                    'counterdrill_height')
         validator.validate_count(2,
-                                 {'countersink_radius', 'countersink_diameter'},
+                                 {'counterdrill_radius', 'counterdrill_diameter'},
                                  'countersink_angle',
                                  'countersink_height')
 
@@ -166,25 +168,33 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
 
     # ------------------------------------------------------------------------------------------------------------------
     @property
-    def countersink_radius(self) -> float:
+    def counterdrill_radius(self) -> float:
         """
-        Returns the radius at the top of the countersink.
+        Returns the of the countersink.
         """
-        if self._countersink_radius is None:
-            self._countersink_radius = 0.5 * self._countersink_diameter
+        if self._counterdrill_radius is None:
+            self._counterdrill_radius = 0.5 * self._counterdrill_diameter
 
-        return self._countersink_radius
+        return self._counterdrill_radius
 
     # ------------------------------------------------------------------------------------------------------------------
     @property
-    def countersink_diameter(self) -> float:
+    def counterdrill_diameter(self) -> float:
         """
-        Returns the diameter at the top of the countersink.
+        Returns the of the countersink.
         """
-        if self._countersink_diameter is None:
-            self._countersink_diameter = 2.0 * self._countersink_radius
+        if self._counterdrill_diameter is None:
+            self._counterdrill_diameter = 2.0 * self._counterdrill_radius
 
-        return self._countersink_diameter
+        return self._counterdrill_diameter
+
+    # ------------------------------------------------------------------------------------------------------------------
+    @property
+    def counterdrill_height(self) -> float:
+        """
+        Returns the height of the counterdrill.
+        """
+        return self._counterdrill_height
 
     # ------------------------------------------------------------------------------------------------------------------
     @property
@@ -193,7 +203,7 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         Returns the angle of the countersink.
         """
         if self._countersink_angle is None:
-            self._countersink_angle = 2.0 * math.degrees(math.atan2(self.countersink_radius - self.radius,
+            self._countersink_angle = 2.0 * math.degrees(math.atan2(self.counterdrill_radius - self.radius,
                                                                     self.countersink_height))
 
         return self._countersink_angle
@@ -205,18 +215,10 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         Returns the height of the countersink.
         """
         if self._countersink_height is None:
-            diff_radia = self.countersink_radius - self.radius
+            diff_radia = self.counterdrill_radius - self.radius
             self._countersink_height = diff_radia / math.tan(math.radians(0.5 * self.countersink_angle))
 
         return self._countersink_height
-
-    # ------------------------------------------------------------------------------------------------------------------
-    @property
-    def counterdrill_height(self) -> float:
-        """
-        Returns the height of the counterdrill.
-        """
-        return self._counterdrill_height
 
     # ------------------------------------------------------------------------------------------------------------------
     def real_fn(self, context: Context) -> int | None:
@@ -224,7 +226,7 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
         Returns the real fixed number of fragments in 360 degrees.
         """
         if self.fn4n:
-            return Radius2Sides4n.r2sides4n(context, self.countersink_radius)
+            return Radius2Sides4n.r2sides4n(context, self.counterdrill_radius)
 
         return self.fn
 
@@ -244,8 +246,8 @@ class HoleCounterdrilled(HoleRotationMixin, Hole):
 
         nodes = [Vector2(0.0, vertical_offset),
                  Vector2(0.0, vertical_offset + self.height),
-                 Vector2(self.countersink_radius, vertical_offset + self.height),
-                 Vector2(self.countersink_radius, vertical_offset + self.height - self.counterdrill_height),
+                 Vector2(self.counterdrill_radius, vertical_offset + self.height),
+                 Vector2(self.counterdrill_radius, vertical_offset + self.height - self.counterdrill_height),
                  Vector2(self.radius,
                          vertical_offset + self.height - self.counterdrill_height - self.countersink_height),
                  Vector2(self.radius, vertical_offset)]

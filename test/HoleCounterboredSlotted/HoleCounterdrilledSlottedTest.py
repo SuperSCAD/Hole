@@ -19,7 +19,7 @@ class HoleCounterboredSlottedTest(ScadTestCase):
     # ------------------------------------------------------------------------------------------------------------------
     def test_alignment(self):
         """
-        Test the alignment of a counterbored hole.
+        Test the alignment of a slotted counterbored hole.
         """
         scad = Scad(context=Context(fn=360, eps=0.35, vpr=Vector3(90.0, 0.0, 0.0)))
 
@@ -57,7 +57,7 @@ class HoleCounterboredSlottedTest(ScadTestCase):
     # ------------------------------------------------------------------------------------------------------------------
     def test_alignment_with_profiles(self):
         """
-        Test the alignment of a counterbored hole with profiles.
+        Test the alignment of a slotted counterbored hole with profiles.
         """
         scad = Scad(context=Context(fn=360, eps=0.1, vpr=Vector3(90.0, 0.0, 0.0)))
 

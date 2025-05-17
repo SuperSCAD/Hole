@@ -60,22 +60,22 @@ class HoleCounterboredSlotted(HoleCounterbored, HoleRotationSlottedMixin):
         :param fn4n: Whether to create a hole with a multiple of 4 vertices.
         """
         HoleCounterbored.__init__(self,
-                                    height=height,
-                                    radius=radius,
-                                    diameter=diameter,
-                                    counterbore_radius=counterbore_radius,
-                                    counterbore_diameter=counterbore_diameter,
-                                    counterbore_height=counterbore_height,
-                                    alignment=alignment,
-                                    profile_top=profile_top,
-                                    profile_bottom=profile_bottom,
-                                    extend_by_eps_top=extend_by_eps_top,
-                                    extend_by_eps_bottom=extend_by_eps_bottom,
-                                    extend_by_eps_boundary=extend_by_eps_boundary,
-                                    fa=fa,
-                                    fs=fs,
-                                    fn=fn,
-                                    fn4n=fn4n)
+                                  height=height,
+                                  radius=radius,
+                                  diameter=diameter,
+                                  counterbore_radius=counterbore_radius,
+                                  counterbore_diameter=counterbore_diameter,
+                                  counterbore_height=counterbore_height,
+                                  alignment=alignment,
+                                  profile_top=profile_top,
+                                  profile_bottom=profile_bottom,
+                                  extend_by_eps_top=extend_by_eps_top,
+                                  extend_by_eps_bottom=extend_by_eps_bottom,
+                                  extend_by_eps_boundary=extend_by_eps_boundary,
+                                  fa=fa,
+                                  fs=fs,
+                                  fn=fn,
+                                  fn4n=fn4n)
         self._overall_length: float | None = overall_length
         """
         The overall length of the hole. 
