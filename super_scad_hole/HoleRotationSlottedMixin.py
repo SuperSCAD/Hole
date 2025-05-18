@@ -13,7 +13,10 @@ from super_scad.transformation.Rotate3D import Rotate3D
 from super_scad.transformation.Translate3D import Translate3D
 from super_scad_smooth_profile.SmoothProfileParams import SmoothProfileParams
 
+from super_scad_hole.HoleRotationMixin import HoleRotationMixin
 
+
+# class HoleRotationSlottedMixin(HoleRotationMixin, ABC):
 class HoleRotationSlottedMixin(ABC):
     """
     Widget for creating slotted holes.

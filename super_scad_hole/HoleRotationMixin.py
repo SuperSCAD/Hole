@@ -1,15 +1,14 @@
 import abc
 from abc import ABC
-from typing import List, Tuple
+from typing import Tuple
 
-from super_scad.boolean.Difference import Difference
-from super_scad.boolean.Union import Union
 from super_scad.d2.Polygon import Polygon
 from super_scad.d2.Rectangle import Rectangle
 from super_scad.d3.RotateExtrude import RotateExtrude
 from super_scad.scad.Context import Context
 from super_scad.scad.ScadWidget import ScadWidget
 from super_scad.transformation.Translate2D import Translate2D
+from super_scad.util.YinYang import YinYang
 from super_scad_smooth_profile.SmoothProfileParams import SmoothProfileParams
 
 
@@ -24,6 +23,15 @@ class HoleRotationMixin(ABC):
     def _create_polygon(self) -> Tuple[Polygon, SmoothProfileParams, SmoothProfileParams]:
         """
         Returns a polygon that is the right side of the cross-section of the hole.
+        """
+        raise NotImplementedError()
+
+    # ------------------------------------------------------------------------------------------------------------------
+    @property
+    @abc.abstractmethod
+    def height(self) -> float:
+        """
+        Returns the height/length of the hole.
         """
         raise NotImplementedError()
 
@@ -48,30 +56,25 @@ class HoleRotationMixin(ABC):
                                depth=self.height + 2 * context.eps,
                                extend_by_eps_sides=[True, True, False, True])
         left_halve = Translate2D(x=-left_halve.width, y=-context.eps, child=left_halve)
-        negatives: List[ScadWidget] = [left_halve]
-        positives: List[ScadWidget] = [profile]
 
-        negative1, positive1 = self.profile_top.create_smooth_profiles(params=top_params)
-        if negative1 is not None:
-            negatives.append(negative1)
-        if positive1 is not None:
-            positives.append(positive1)
+        yin_yang = YinYang()
+        yin_yang += (left_halve, None)
+        yin_yang += self.profile_top.create_smooth_profiles(params=top_params)
+        yin_yang += self.profile_bottom.create_smooth_profiles(params=bottom_params)
 
-        negative, positive = self.profile_bottom.create_smooth_profiles(params=bottom_params)
-
-        if negative is not None:
-            negatives.append(negative)
-        if positive is not None:
-            positives.append(positive)
-
-        if positives:
-            profile = Union(children=[profile, *positives])
-        if negatives:
-            profile = Difference(children=[profile, *negatives])
-
+        profile = yin_yang.apply_positives_negatives(profile)
         convexity = max(2, self.profile_top.convexity or 0, self.profile_bottom.convexity or 0)
 
         return profile, convexity
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def debug_widget(self, widget: ScadWidget, level: int = 0):
+        print(f'{"  " * level} {type(widget)}')
+        if hasattr(widget, 'children'):
+            for child in widget.children:
+                self.debug_widget(child, level + 1)
+        elif hasattr(widget, 'child'):
+            self.debug_widget(widget.child, level + 1)
 
     # ------------------------------------------------------------------------------------------------------------------
     def _build_hole(self, context: Context) -> ScadWidget:
