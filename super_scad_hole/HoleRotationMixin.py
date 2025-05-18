@@ -68,15 +68,6 @@ class HoleRotationMixin(ABC):
         return profile, convexity
 
     # ------------------------------------------------------------------------------------------------------------------
-    def debug_widget(self, widget: ScadWidget, level: int = 0):
-        print(f'{"  " * level} {type(widget)}')
-        if hasattr(widget, 'children'):
-            for child in widget.children:
-                self.debug_widget(child, level + 1)
-        elif hasattr(widget, 'child'):
-            self.debug_widget(widget.child, level + 1)
-
-    # ------------------------------------------------------------------------------------------------------------------
     def _build_hole(self, context: Context) -> ScadWidget:
         """
         Builds a SuperSCAD widget.
